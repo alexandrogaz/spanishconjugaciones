@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spanische Konjugation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1916;
+    --border: #2e2c28;
+    --accent: #c8a96e;
+    --accent2: #7eb8c9;
+    --accent3: #a87ec9;
+    --accent-irr: #e07a5f;
+    --accent-ex: #6eb89a;
+    --text: #e8e4dc;
+    --muted: #7a7568;
+    --highlight: #2a2520;
+    --active: #c8a96e22;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; min-height: 100vh; padding: 2rem 1.5rem 4rem; }
+
+  header { max-width: 980px; margin: 0 auto 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 1.2rem; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3.5vw, 2.1rem); color: var(--accent); letter-spacing: 0.02em; line-height: 1.2; }
+  header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.35rem; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.05em; }
+
+  /* ── TABS ── */
+  .main-tabs { max-width: 980px; margin: 0 auto 1.5rem; display: flex; border-bottom: 1px solid var(--border); }
+  .main-tab { background: none; border: 1px solid transparent; border-bottom: none; color: var(--muted); padding: 0.55rem 1.2rem; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; transition: all 0.15s; position: relative; bottom: -1px; border-radius: 3px 3px 0 0; }
+  .main-tab:hover { color: var(--accent); }
+  .main-tab.active { background: var(--bg); border-color: var(--border); border-bottom-color: var(--bg); color: var(--accent); font-weight: 500; }
+  .main-tab.irr-tab { color: var(--accent-irr); opacity: 0.6; }
+  .main-tab.irr-tab:hover { opacity: 1; }
+  .main-tab.irr-tab.active { color: var(--accent-irr); opacity: 1; border-color: var(--border); border-bottom-color: var(--bg); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── CONTROLS ── */
+  .controls-wrap { max-width: 980px; margin: 0 auto 1.3rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .control-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+  .control-row label { font-size: 0.7rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; min-width: 3.5rem; }
+  .btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.32rem 0.75rem; border-radius: 2px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.76rem; transition: all 0.15s; white-space: nowrap; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.active { background: var(--active); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+  .btn.verb-ar { border-color: #5a8a6a; color: #5a8a6a; }
+  .btn.verb-ar.active { background: #5a8a6a22; border-color: #7ab88a; color: #7ab88a; }
+  .btn.verb-er { border-color: #6a7a9a; color: #6a7a9a; }
+  .btn.verb-er.active { background: #6a7a9a22; border-color: #7eb8c9; color: var(--accent2); }
+  .btn.verb-ir { border-color: #8a6a9a; color: #8a6a9a; }
+  .btn.verb-ir.active { background: #8a6a9a22; border-color: #a87ec9; color: var(--accent3); }
+  .btn.all-tenses { border-color: var(--accent2); color: var(--accent2); }
+  .btn.all-tenses.active { background: #7eb8c922; }
+
+  .legend { max-width: 980px; margin: 0 auto 1.1rem; display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.72rem; font-family: 'IBM Plex Mono', monospace; color: var(--muted); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .dot-ar { background: #7ab88a; }
+  .dot-er { background: #7eb8c9; }
+  .dot-ir { background: #a87ec9; }
+
+  /* ── TENSE BLOCKS ── */
+  .main { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+  .tense-block { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+  .tense-block.hidden { display: none; }
+  .tense-header { background: var(--surface); padding: 0.6rem 1rem; display: flex; align-items: baseline; gap: 0.8rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tense-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent); }
+  .tense-de { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .tense-note { font-size: 0.7rem; color: var(--muted); font-style: italic; margin-left: auto; }
+
+  .irr-link { background: #e07a5f18; border: 1px solid #e07a5f55; color: var(--accent-irr); font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; padding: 0.18rem 0.55rem; border-radius: 2px; cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.3rem; }
+  .irr-link:hover { background: #e07a5f33; border-color: var(--accent-irr); }
+  .irr-link.none { opacity: 0.3; cursor: default; pointer-events: none; }
+
+  /* ── CONJUGATION TABLE ── */
+  table { width: 100%; border-collapse: collapse; font-size: 0.81rem; }
+  thead tr { background: #16150f; }
+  thead th { padding: 0.42rem 0.7rem; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 400; border-bottom: 1px solid var(--border); }
+  thead th.ar-col { color: #7ab88a; }
+  thead th.er-col { color: var(--accent2); }
+  thead th.ir-col { color: var(--accent3); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--highlight); }
+  td { padding: 0.48rem 0.7rem; vertical-align: middle; border-right: 1px solid var(--border); }
+  td:last-child { border-right: none; }
+  .td-pronoun { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--accent); font-size: 0.77rem; white-space: nowrap; }
+  .td-german { color: var(--muted); font-size: 0.74rem; white-space: nowrap; }
+  .td-conj { font-family: 'IBM Plex Mono', monospace; font-size: 0.83rem; }
+  .td-conj .stem { color: var(--muted); }
+  .td-conj .end-ar { color: #7ab88a; font-weight: 600; }
+  .td-conj .end-er { color: var(--accent2); font-weight: 600; }
+  .td-conj .end-ir { color: var(--accent3); font-weight: 600; }
+  body.hide-ar .col-ar { display: none; }
+  body.hide-er .col-er { display: none; }
+  body.hide-ir .col-ir { display: none; }
+
+  /* ── EXAMPLE TREE (all tenses) ── */
+  .ex-tree { border-top: 1px dashed var(--border); background: #111009; }
+  .ex-toggle { width: 100%; background: none; border: none; padding: 0.48rem 1rem; display: flex; align-items: center; gap: 0.55rem; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--muted); text-align: left; transition: color 0.15s; }
+  .ex-toggle:hover { color: var(--accent-ex); }
+  .ex-toggle.open { color: var(--accent-ex); }
+  .ex-toggle .tog-icon { font-size: 0.6rem; transition: transform 0.2s; display: inline-block; }
+  .ex-toggle.open .tog-icon { transform: rotate(90deg); }
+  .ex-toggle .tog-hint { margin-left: auto; font-size: 0.6rem; color: var(--muted); opacity: 0.6; font-style: italic; }
+  .ex-body { display: none; padding: 0.75rem 1rem 1rem; border-top: 1px solid var(--border); }
+  .ex-body.open { display: block; }
+
+  /* formula bar for haber tenses */
+  .haber-formula { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; }
+  .hf-aux { background: #7eb8c922; border: 1px solid #7eb8c955; color: var(--accent2); padding: 0.18rem 0.5rem; border-radius: 2px; font-weight: 600; }
+  .hf-plus, .hf-eq { color: var(--muted); }
+  .hf-part { background: #c8a96e22; border: 1px solid #c8a96e55; color: var(--accent); padding: 0.18rem 0.5rem; border-radius: 2px; font-weight: 600; }
+  .hf-result { color: var(--text); font-weight: 500; }
+  .hf-de { color: var(--muted); font-size: 0.67rem; font-style: italic; font-family: 'IBM Plex Sans', sans-serif; }
+
+  /* haber rows */
+  .haber-rows { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 1rem; }
+  .haber-row { display: grid; grid-template-columns: 100px 110px 1fr 1fr; align-items: center; border-bottom: 1px solid var(--border); font-size: 0.77rem; }
+  .haber-row:last-child { border-bottom: none; }
+  .haber-row:nth-child(odd) { background: var(--surface); }
+  .haber-row:nth-child(even) { background: #13120e; }
+  .hr-pronoun { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 600; color: var(--accent); padding: 0.42rem 0.7rem; border-right: 1px solid var(--border); }
+  .hr-aux { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; font-weight: 600; color: var(--accent2); padding: 0.42rem 0.7rem; border-right: 1px solid var(--border); }
+  .hr-full { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; color: var(--text); padding: 0.42rem 0.7rem; border-right: 1px solid var(--border); }
+  .hr-full .part { color: var(--accent); }
+  .hr-de { font-size: 0.71rem; color: var(--muted); font-style: italic; padding: 0.42rem 0.7rem; }
+
+  /* hubiera rows */
+  .haber-row .hr-aux-hub { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; font-weight: 600; color: var(--accent3); padding: 0.42rem 0.7rem; border-right: 1px solid var(--border); }
+
+  /* example sentences */
+  .ex-section-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; margin-top: 0.85rem; }
+  .ex-section-label:first-child { margin-top: 0; }
+  .ex-list { display: flex; flex-direction: column; gap: 0.45rem; }
+  .ex-item { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding: 0.45rem 0.65rem; background: var(--surface); border: 1px solid var(--border); border-radius: 3px; font-size: 0.78rem; }
+  .ex-es { font-family: 'IBM Plex Mono', monospace; color: var(--text); }
+  .ex-es .key { color: var(--accent-ex); font-weight: 600; }
+  .ex-de { color: var(--muted); font-style: italic; }
+
+  @media (max-width: 640px) {
+    /* ── Layout ── */
+    body { padding: 1rem 0.75rem 5rem; }
+    header { margin-bottom: 1.2rem; padding-bottom: 0.9rem; }
+    header h1 { font-size: 1.25rem; }
+    header p { font-size: 0.72rem; }
+
+    /* ── Tabs ── */
+    .main-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 0; }
+    .main-tabs::-webkit-scrollbar { display: none; }
+    .main-tab { padding: 0.5rem 0.9rem; font-size: 0.76rem; white-space: nowrap; flex-shrink: 0; }
+
+    /* ── Controls ── */
+    .controls-wrap { margin-bottom: 1rem; gap: 0.5rem; }
+    .control-row { gap: 0.35rem; }
+    .control-row label { font-size: 0.62rem; min-width: 2.8rem; }
+    .btn { padding: 0.28rem 0.6rem; font-size: 0.7rem; }
+
+    /* ── Legend ── */
+    .legend { gap: 0.9rem; font-size: 0.66rem; margin-bottom: 0.85rem; }
+
+    /* ── Tense blocks ── */
+    .main { gap: 0.75rem; }
+    .tense-header { padding: 0.5rem 0.75rem; gap: 0.5rem; }
+    .tense-name { font-size: 0.88rem; }
+    .tense-de { font-size: 0.62rem; }
+    .tense-note { display: none; }
+    .irr-link { font-size: 0.58rem; padding: 0.15rem 0.4rem; }
+
+    /* ── TABLE: horizontal scroll with sticky pronoun column ── */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 460px; font-size: 0.75rem; }
+    thead th { padding: 0.38rem 0.55rem; font-size: 0.58rem; }
+    td { padding: 0.38rem 0.55rem; font-size: 0.75rem; }
+
+    /* sticky first column (Pronomen) */
+    tbody td:first-child,
+    thead th:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: var(--surface);
+    }
+    thead th:first-child { background: #16150f; }
+    tbody tr:hover td:first-child { background: var(--highlight); }
+
+    /* ── Haber rows ── */
+    .haber-row { grid-template-columns: 72px 90px 1fr; font-size: 0.72rem; }
+    .hr-de { display: none; }
+    .hr-pronoun { padding: 0.38rem 0.5rem; font-size: 0.66rem; }
+    .hr-aux { padding: 0.38rem 0.5rem; font-size: 0.7rem; }
+    .hr-full { padding: 0.38rem 0.5rem; font-size: 0.7rem; }
+
+    /* ── Haber formula ── */
+    .haber-formula { font-size: 0.68rem; gap: 0.35rem; margin-bottom: 0.65rem; }
+    .hf-aux, .hf-part { padding: 0.15rem 0.4rem; }
+
+    /* ── Example sentences ── */
+    .ex-toggle { padding: 0.42rem 0.75rem; font-size: 0.65rem; }
+    .ex-body { padding: 0.6rem 0.75rem 0.85rem; }
+    .ex-section-label { font-size: 0.58rem; }
+    .ex-item { grid-template-columns: 1fr; gap: 0.25rem; padding: 0.38rem 0.55rem; font-size: 0.74rem; }
+    .ex-de { font-size: 0.71rem; border-top: 1px solid var(--border); padding-top: 0.25rem; margin-top: 0.1rem; }
+
+    /* ── Irr panel ── */
+    .irr-grid { grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    .irr-card-body { padding: 0.4rem 0.55rem; gap: 0.2rem; }
+    .irr-row { font-size: 0.72rem; }
+    .irr-row .pronoun { font-size: 0.62rem; min-width: 55px; }
+    .part-grid { grid-template-columns: 1fr 1fr 1fr; gap: 0.4rem; }
+    .part-card { padding: 0.4rem 0.55rem; }
+    .part-card .part-form { font-size: 0.8rem; }
+    .irr-section-title { font-size: 0.9rem; flex-wrap: wrap; }
+    .tense-tag { font-size: 0.55rem; }
+    /* Hide Deutsch column on mobile — already visible via haber-tree */
+    .td-german, thead th:nth-child(2) { display: none; }
+  }
+
+  /* ── IRR PANEL ── */
+  .irr-wrap { max-width: 980px; margin: 0 auto; }
+  .irr-intro { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.4rem; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.03em; border-left: 3px solid var(--accent-irr); padding-left: 0.8rem; }
+  .irr-section { margin-bottom: 1.8rem; }
+  .irr-section-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent-irr); margin-bottom: 0.3rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 0.8rem; }
+  .irr-section-title span.de { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .irr-note { font-size: 0.73rem; color: var(--muted); font-style: italic; margin-bottom: 0.7rem; margin-top: 0.1rem; }
+  .irr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; margin-bottom: 0.8rem; }
+  .irr-card { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+  .irr-card-head { background: #16150f; padding: 0.35rem 0.7rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .irr-card-head .inf { color: var(--text); font-weight: 600; }
+  .irr-card-head .meaning { color: var(--muted); font-size: 0.64rem; }
+  .irr-card-body { padding: 0.5rem 0.7rem; display: flex; flex-direction: column; gap: 0.25rem; }
+  .irr-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.78rem; gap: 0.5rem; }
+  .irr-row .pronoun { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--muted); min-width: 70px; }
+  .irr-row .form { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--accent-irr); text-align: right; }
+  .part-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem; }
+  .part-card { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.7rem; display: flex; flex-direction: column; gap: 0.15rem; }
+  .part-card .inf-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+  .part-card .arr { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--muted); }
+  .part-card .part-form { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; font-weight: 600; color: var(--accent-irr); }
+  .part-card .part-de { font-size: 0.68rem; color: var(--muted); font-style: italic; }
+  .tense-tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; padding: 0.1rem 0.4rem; border-radius: 2px; background: #e07a5f18; border: 1px solid #e07a5f44; color: var(--accent-irr); margin-left: auto; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Spanische Konjugation — alle Zeitformen</h1>
+  <p>-ar · -er · -ir · Personalpronomen · Beispielsätze · Verbos Irregulares</p>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" onclick="switchPanel('conj', this)">Konjugationstabelle</button>
+  <button class="main-tab irr-tab" onclick="switchPanel('irr', this)">⚡ Verbos Irregulares</button>
+</div>
+
+<!-- ══════ PANEL 1 — KONJUGATION ══════ -->
+<div class="panel active" id="panel-conj">
+  <div class="controls-wrap">
+    <div class="control-row">
+      <label>Zeitform</label>
+      <button class="btn all-tenses active" onclick="filterTense('all',this)">Alle</button>
+      <button class="btn" onclick="filterTense('presente',this)">Presente</button>
+      <button class="btn" onclick="filterTense('futuro-proximo',this)">Fut. Próximo</button>
+      <button class="btn" onclick="filterTense('futuro-simple',this)">Fut. Simple</button>
+      <button class="btn" onclick="filterTense('perfecto',this)">Pret. Perfecto</button>
+      <button class="btn" onclick="filterTense('imperfecto',this)">Pret. Imperfecto</button>
+      <button class="btn" onclick="filterTense('indefinido',this)">Pret. Indefinido</button>
+      <button class="btn" onclick="filterTense('pluscuamperfecto',this)">Pluscuamperf.</button>
+      <button class="btn" onclick="filterTense('cond-simple',this)">Cond. Simple</button>
+      <button class="btn" onclick="filterTense('cond-compuesto',this)">Cond. Compuesto</button>
+      <button class="btn" onclick="filterTense('hubiera',this)">Hubiera</button>
+    </div>
+    <div class="control-row">
+      <label>Verb</label>
+      <button class="btn verb-ar active" onclick="toggleVerb('ar',this)">-ar · hablar</button>
+      <button class="btn verb-er active" onclick="toggleVerb('er',this)">-er · comer</button>
+      <button class="btn verb-ir active" onclick="toggleVerb('ir',this)">-ir · vivir</button>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="dot dot-ar"></span>-ar · hablar (sprechen)</span>
+    <span><span class="dot dot-er"></span>-er · comer (essen)</span>
+    <span><span class="dot dot-ir"></span>-ir · vivir (leben)</span>
+  </div>
+  <div class="main">
+
+    <!-- ── PRESENTE ── -->
+    <div class="tense-block" data-tense="presente">
+      <div class="tense-header"><span class="tense-name">Presente Indicativo</span><span class="tense-de">Präsens</span><span class="tense-note">ich spreche / esse / lebe</span><button class="irr-link none">⚡ keine Irregulares</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">o</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">o</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">o</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">as</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">es</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">es</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">a</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">e</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">e</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">amos</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">emos</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">imos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">áis</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">éis</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ís</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">an</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">en</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">en</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">Präsens — ich spreche gerade / generell</span></button>
+      <div class="ex-body"><p class="ex-section-label">Beispiele</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Yo <span class="key">hablo</span> español.</span><span class="ex-de">Ich spreche Spanisch.</span></div>
+        <div class="ex-item"><span class="ex-es">Ella <span class="key">come</span> pizza todos los días.</span><span class="ex-de">Sie isst jeden Tag Pizza.</span></div>
+        <div class="ex-item"><span class="ex-es">Nosotros <span class="key">vivimos</span> en Berlín.</span><span class="ex-de">Wir leben in Berlin.</span></div>
+        <div class="ex-item"><span class="ex-es">¿Tú <span class="key">hablas</span> alemán?</span><span class="ex-de">Sprichst du Deutsch?</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- ── FUTURO PRÓXIMO ── -->
+    <div class="tense-block" data-tense="futuro-proximo">
+      <div class="tense-header"><span class="tense-name">Futuro Próximo</span><span class="tense-de">Nahes Futur</span><span class="tense-note">ir a + Infinitiv</span><button class="irr-link none">⚡ keine Irregulares</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">voy a hablar</td><td class="td-conj col-er">voy a comer</td><td class="td-conj col-ir">voy a vivir</td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar">vas a hablar</td><td class="td-conj col-er">vas a comer</td><td class="td-conj col-ir">vas a vivir</td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar">va a hablar</td><td class="td-conj col-er">va a comer</td><td class="td-conj col-ir">va a vivir</td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar">vamos a hablar</td><td class="td-conj col-er">vamos a comer</td><td class="td-conj col-ir">vamos a vivir</td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar">vais a hablar</td><td class="td-conj col-er">vais a comer</td><td class="td-conj col-ir">vais a vivir</td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar">van a hablar</td><td class="td-conj col-er">van a comer</td><td class="td-conj col-ir">van a vivir</td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">nahes Futur — ich werde gleich / ich habe vor</span></button>
+      <div class="ex-body"><p class="ex-section-label">Beispiele</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Yo <span class="key">voy a comer</span> tacos.</span><span class="ex-de">Ich werde gleich Tacos essen.</span></div>
+        <div class="ex-item"><span class="ex-es">Él <span class="key">va a vivir</span> en México.</span><span class="ex-de">Er wird in Mexiko leben.</span></div>
+        <div class="ex-item"><span class="ex-es">Nosotros <span class="key">vamos a hablar</span> mañana.</span><span class="ex-de">Wir werden morgen sprechen.</span></div>
+        <div class="ex-item"><span class="ex-es">¿Qué <span class="key">vas a hacer</span> hoy?</span><span class="ex-de">Was wirst du heute machen?</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- ── FUTURO SIMPLE ── -->
+    <div class="tense-block" data-tense="futuro-simple">
+      <div class="tense-header"><span class="tense-name">Futuro Simple / Imperfecto</span><span class="tense-de">Futur I</span><span class="tense-note">Endungen identisch für alle Verbtypen</span><button class="irr-link" onclick="goToIrr('irr-futuro-simple')">⚡ Irregulares →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">é</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">é</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">é</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">ás</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">ás</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">ás</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">á</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">á</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">á</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">emos</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">emos</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">emos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">éis</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">éis</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">éis</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">án</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">án</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">án</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">Futur I — ich werde sprechen</span></button>
+      <div class="ex-body"><p class="ex-section-label">Beispiele</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">El próximo mes <span class="key">viajaré</span> a México.</span><span class="ex-de">Nächsten Monat werde ich nach Mexiko reisen.</span></div>
+        <div class="ex-item"><span class="ex-es">Mañana <span class="key">habrá</span> 30 grados.</span><span class="ex-de">Morgen werden es 30 Grad sein.</span></div>
+        <div class="ex-item"><span class="ex-es">¿Qué hora <span class="key">será</span> cuando lleguemos?</span><span class="ex-de">Wie viel Uhr wird es wohl sein, wenn wir ankommen?</span></div>
+        <div class="ex-item"><span class="ex-es">Yo <span class="key">estudiaré</span> más.</span><span class="ex-de">Ich werde mehr lernen.</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- ── PRETÉRITO PERFECTO COMPUESTO ── -->
+    <div class="tense-block" data-tense="perfecto">
+      <div class="tense-header"><span class="tense-name">Pretérito Perfecto Compuesto</span><span class="tense-de">Perfekt</span><span class="tense-note">haber (Präsens) + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">he <span class="end-ar">hablado</span></td><td class="td-conj col-er">he <span class="end-er">comido</span></td><td class="td-conj col-ir">he <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar">has <span class="end-ar">hablado</span></td><td class="td-conj col-er">has <span class="end-er">comido</span></td><td class="td-conj col-ir">has <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar">ha <span class="end-ar">hablado</span></td><td class="td-conj col-er">ha <span class="end-er">comido</span></td><td class="td-conj col-ir">ha <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar">hemos <span class="end-ar">hablado</span></td><td class="td-conj col-er">hemos <span class="end-er">comido</span></td><td class="td-conj col-ir">hemos <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar">habéis <span class="end-ar">hablado</span></td><td class="td-conj col-er">habéis <span class="end-er">comido</span></td><td class="td-conj col-ir">habéis <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar">han <span class="end-ar">hablado</span></td><td class="td-conj col-er">han <span class="end-er">comido</span></td><td class="td-conj col-ir">han <span class="end-ir">vivido</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>haber-Baum + Beispielsätze<span class="tog-hint">he/has/ha … + Partizip = Perfekt</span></button>
+      <div class="ex-body">
+        <div class="haber-formula"><span class="hf-aux">he / has / ha …</span><span class="hf-plus">+</span><span class="hf-part">hablado / comido / vivido</span><span class="hf-eq">=</span><span class="hf-result">he hablado</span><span class="hf-de">→ ich habe gesprochen</span></div>
+        <div class="haber-rows">
+          <div class="haber-row"><span class="hr-pronoun">yo</span><span class="hr-aux">he</span><span class="hr-full">he <span class="part">hablado</span></span><span class="hr-de">ich habe gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">tú</span><span class="hr-aux">has</span><span class="hr-full">has <span class="part">comido</span></span><span class="hr-de">du hast gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">él/ella</span><span class="hr-aux">ha</span><span class="hr-full">ha <span class="part">vivido</span></span><span class="hr-de">er/sie hat gelebt</span></div>
+          <div class="haber-row"><span class="hr-pronoun">nosotros</span><span class="hr-aux">hemos</span><span class="hr-full">hemos <span class="part">hablado</span></span><span class="hr-de">wir haben gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">vosotros</span><span class="hr-aux">habéis</span><span class="hr-full">habéis <span class="part">comido</span></span><span class="hr-de">ihr habt gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">ellos/uds.</span><span class="hr-aux">han</span><span class="hr-full">han <span class="part">vivido</span></span><span class="hr-de">sie haben gelebt</span></div>
+        </div>
+        <p class="ex-section-label">Beispielsätze</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">Yo <span class="key">he viajado</span> a México.</span><span class="ex-de">Ich habe Mexiko bereist.</span></div>
+          <div class="ex-item"><span class="ex-es">¿<span class="key">Has visto</span> esa película?</span><span class="ex-de">Hast du diesen Film gesehen?</span></div>
+          <div class="ex-item"><span class="ex-es">Hoy <span class="key">he trabajado</span> mucho.</span><span class="ex-de">Heute habe ich viel gearbeitet.</span></div>
+          <div class="ex-item"><span class="ex-es">Nunca <span class="key">he comido</span> tacos de canasta.</span><span class="ex-de">Ich habe noch nie Tacos de canasta gegessen.</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── PRETÉRITO IMPERFECTO ── -->
+    <div class="tense-block" data-tense="imperfecto">
+      <div class="tense-header"><span class="tense-name">Pretérito Imperfecto</span><span class="tense-de">Präteritum (beschreibend)</span><span class="tense-note">-er und -ir teilen dieselben Endungen</span><button class="irr-link" onclick="goToIrr('irr-imperfecto')">⚡ Irregulares →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">aba</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">ía</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ía</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">abas</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">ías</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ías</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">aba</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">ía</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ía</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">ábamos</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">íamos</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">íamos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">abais</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">íais</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">íais</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">aban</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">ían</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ían</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">Zustand, Gewohnheit, laufende Handlung in der Vergangenheit</span></button>
+      <div class="ex-body"><p class="ex-section-label">Gewohnheit / Zustand</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Cuando <span class="key">era</span> niño, <span class="key">jugaba</span> fútbol.</span><span class="ex-de">Als ich ein Kind war, spielte ich Fußball.</span></div>
+        <div class="ex-item"><span class="ex-es">Yo <span class="key">era</span> un atleta.</span><span class="ex-de">Ich war ein Athlet.</span></div>
+        <div class="ex-item"><span class="ex-es">Él <span class="key">comía</span> muy saludable antes.</span><span class="ex-de">Er aß früher sehr gesund.</span></div>
+      </div>
+      <p class="ex-section-label">Laufende Handlung + abgeschlossener Einschnitt (Imperfecto + Indefinido)</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es"><span class="key">Estaba</span> haciendo la tarea cuando <span class="key">sonó</span> el teléfono.</span><span class="ex-de">Ich machte gerade die Hausaufgaben, als das Telefon klingelte.</span></div>
+        <div class="ex-item"><span class="ex-es"><span class="key">Jugaba</span> fútbol cuando se <span class="key">rompió</span> el brazo.</span><span class="ex-de">Er spielte Fußball, als er sich den Arm brach.</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- ── PRETÉRITO INDEFINIDO ── -->
+    <div class="tense-block" data-tense="indefinido">
+      <div class="tense-header"><span class="tense-name">Pretérito Indefinido / Simple</span><span class="tense-de">Präteritum (abgeschlossen)</span><span class="tense-note">-er/-ir gleiche Endungen · dominante Form in Mexiko</span><button class="irr-link" onclick="goToIrr('irr-indefinido')">⚡ Irregulares →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">é</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">í</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">í</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">aste</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">iste</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">iste</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">ó</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">ió</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ió</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">amos</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">imos</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">imos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">asteis</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">isteis</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">isteis</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">aron</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">ieron</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ieron</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">abgeschlossene Einzelhandlung in der Vergangenheit</span></button>
+      <div class="ex-body"><p class="ex-section-label">Beispiele</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Ayer <span class="key">comí</span> tacos.</span><span class="ex-de">Gestern habe ich Tacos gegessen.</span></div>
+        <div class="ex-item"><span class="ex-es"><span class="key">Tuve</span> una junta ayer.</span><span class="ex-de">Ich hatte gestern ein Meeting.</span></div>
+        <div class="ex-item"><span class="ex-es">Ella <span class="key">habló</span> con un abogado antes de venir.</span><span class="ex-de">Sie sprach mit einem Anwalt, bevor sie kam.</span></div>
+        <div class="ex-item"><span class="ex-es">El equipo <span class="key">ganó</span> el tercer lugar.</span><span class="ex-de">Das Team gewann den dritten Platz.</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- ── PRETÉRITO PLUSCUAMPERFECTO ── -->
+    <div class="tense-block" data-tense="pluscuamperfecto">
+      <div class="tense-header"><span class="tense-name">Pretérito Pluscuamperfecto</span><span class="tense-de">Plusquamperfekt</span><span class="tense-note">haber (Imperfecto) + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">había <span class="end-ar">hablado</span></td><td class="td-conj col-er">había <span class="end-er">comido</span></td><td class="td-conj col-ir">había <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar">habías <span class="end-ar">hablado</span></td><td class="td-conj col-er">habías <span class="end-er">comido</span></td><td class="td-conj col-ir">habías <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar">había <span class="end-ar">hablado</span></td><td class="td-conj col-er">había <span class="end-er">comido</span></td><td class="td-conj col-ir">había <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar">habíamos <span class="end-ar">hablado</span></td><td class="td-conj col-er">habíamos <span class="end-er">comido</span></td><td class="td-conj col-ir">habíamos <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar">habíais <span class="end-ar">hablado</span></td><td class="td-conj col-er">habíais <span class="end-er">comido</span></td><td class="td-conj col-ir">habíais <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar">habían <span class="end-ar">hablado</span></td><td class="td-conj col-er">habían <span class="end-er">comido</span></td><td class="td-conj col-ir">habían <span class="end-ir">vivido</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>haber-Baum + Beispielsätze<span class="tog-hint">había/habías … + Partizip = Plusquamperfekt</span></button>
+      <div class="ex-body">
+        <div class="haber-formula"><span class="hf-aux">había / habías / había …</span><span class="hf-plus">+</span><span class="hf-part">hablado / comido / vivido</span><span class="hf-eq">=</span><span class="hf-result">había hablado</span><span class="hf-de">→ ich hatte gesprochen</span></div>
+        <div class="haber-rows">
+          <div class="haber-row"><span class="hr-pronoun">yo</span><span class="hr-aux">había</span><span class="hr-full">había <span class="part">hablado</span></span><span class="hr-de">ich hatte gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">tú</span><span class="hr-aux">habías</span><span class="hr-full">habías <span class="part">comido</span></span><span class="hr-de">du hattest gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">él/ella</span><span class="hr-aux">había</span><span class="hr-full">había <span class="part">vivido</span></span><span class="hr-de">er/sie hatte gelebt</span></div>
+          <div class="haber-row"><span class="hr-pronoun">nosotros</span><span class="hr-aux">habíamos</span><span class="hr-full">habíamos <span class="part">hablado</span></span><span class="hr-de">wir hatten gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">vosotros</span><span class="hr-aux">habíais</span><span class="hr-full">habíais <span class="part">comido</span></span><span class="hr-de">ihr hattet gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">ellos/uds.</span><span class="hr-aux">habían</span><span class="hr-full">habían <span class="part">vivido</span></span><span class="hr-de">sie hatten gelebt</span></div>
+        </div>
+        <p class="ex-section-label">Beispielsätze — Vergangenheit vor der Vergangenheit</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">Cuando llegué, él ya se <span class="key">había ido</span>.</span><span class="ex-de">Als ich ankam, war er schon gegangen.</span></div>
+          <div class="ex-item"><span class="ex-es">Nunca <span class="key">había visto</span> una persona tan alta.</span><span class="ex-de">Ich hatte noch nie eine so große Person gesehen.</span></div>
+          <div class="ex-item"><span class="ex-es">Cuando entró el maestro, yo ya <span class="key">había acabado</span> la tarea.</span><span class="ex-de">Als der Lehrer hereinkam, hatte ich die Hausaufgaben schon fertig.</span></div>
+          <div class="ex-item"><span class="ex-es">Le compré una hamburguesa porque no <span class="key">había comido</span>.</span><span class="ex-de">Ich kaufte ihr einen Burger, weil sie noch nicht gegessen hatte.</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── CONDICIONAL SIMPLE ── -->
+    <div class="tense-block" data-tense="cond-simple">
+      <div class="tense-header"><span class="tense-name">Condicional Simple</span><span class="tense-de">Konjunktiv II (Gegenwart)</span><span class="tense-note">Endungen identisch für alle Verbtypen</span><button class="irr-link" onclick="goToIrr('irr-cond-simple')">⚡ Irregulares →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">ía</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">ía</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">ía</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">ías</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">ías</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">ías</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">ía</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">ía</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">ía</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">íamos</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">íamos</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">íamos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">íais</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">íais</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">íais</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">ían</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">ían</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">ían</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">hypothetisch, Wunsch, Ratschlag, Zukunft-in-Vergangenheit</span></button>
+      <div class="ex-body"><p class="ex-section-label">Hypothetisch (Si + Imperfecto Subjuntivo)</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Si tuviera mucho dinero, <span class="key">compraría</span> una casa.</span><span class="ex-de">Wenn ich viel Geld hätte, würde ich ein Haus kaufen.</span></div>
+        <div class="ex-item"><span class="ex-es">Si fuera millonario, <span class="key">tendría</span> un Lamborghini.</span><span class="ex-de">Wenn ich Millionär wäre, hätte ich einen Lamborghini.</span></div>
+      </div>
+      <p class="ex-section-label">Ratschlag / Wunsch / Höflichkeit</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Yo en tu lugar, no lo <span class="key">haría</span>.</span><span class="ex-de">An deiner Stelle würde ich das nicht tun.</span></div>
+        <div class="ex-item"><span class="ex-es">Me <span class="key">gustaría</span> un café, por favor.</span><span class="ex-de">Ich hätte gerne einen Kaffee, bitte.</span></div>
+      </div>
+      <p class="ex-section-label">Zukunft in der Vergangenheit</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Ella dijo que <span class="key">vendría</span> a las seis pero no llegó.</span><span class="ex-de">Sie sagte, sie würde um sechs kommen, aber sie kam nicht.</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- ── CONDICIONAL COMPUESTO ── -->
+    <div class="tense-block" data-tense="cond-compuesto">
+      <div class="tense-header"><span class="tense-name">Condicional Compuesto</span><span class="tense-de">Konjunktiv II (Vergangenheit)</span><span class="tense-note">haber (Condicional) + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">habría <span class="end-ar">hablado</span></td><td class="td-conj col-er">habría <span class="end-er">comido</span></td><td class="td-conj col-ir">habría <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar">habrías <span class="end-ar">hablado</span></td><td class="td-conj col-er">habrías <span class="end-er">comido</span></td><td class="td-conj col-ir">habrías <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar">habría <span class="end-ar">hablado</span></td><td class="td-conj col-er">habría <span class="end-er">comido</span></td><td class="td-conj col-ir">habría <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar">habríamos <span class="end-ar">hablado</span></td><td class="td-conj col-er">habríamos <span class="end-er">comido</span></td><td class="td-conj col-ir">habríamos <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar">habríais <span class="end-ar">hablado</span></td><td class="td-conj col-er">habríais <span class="end-er">comido</span></td><td class="td-conj col-ir">habríais <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar">habrían <span class="end-ar">hablado</span></td><td class="td-conj col-er">habrían <span class="end-er">comido</span></td><td class="td-conj col-ir">habrían <span class="end-ir">vivido</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>haber-Baum + Beispielsätze<span class="tog-hint">habría/habrías … + Partizip = Konjunktiv II Vergangenheit</span></button>
+      <div class="ex-body">
+        <div class="haber-formula"><span class="hf-aux">habría / habrías / habría …</span><span class="hf-plus">+</span><span class="hf-part">hablado / comido / vivido</span><span class="hf-eq">=</span><span class="hf-result">habría hablado</span><span class="hf-de">→ ich hätte gesprochen</span></div>
+        <div class="haber-rows">
+          <div class="haber-row"><span class="hr-pronoun">yo</span><span class="hr-aux">habría</span><span class="hr-full">habría <span class="part">hablado</span></span><span class="hr-de">ich hätte gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">tú</span><span class="hr-aux">habrías</span><span class="hr-full">habrías <span class="part">comido</span></span><span class="hr-de">du hättest gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">él/ella</span><span class="hr-aux">habría</span><span class="hr-full">habría <span class="part">vivido</span></span><span class="hr-de">er/sie hätte gelebt</span></div>
+          <div class="haber-row"><span class="hr-pronoun">nosotros</span><span class="hr-aux">habríamos</span><span class="hr-full">habríamos <span class="part">hablado</span></span><span class="hr-de">wir hätten gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">vosotros</span><span class="hr-aux">habríais</span><span class="hr-full">habríais <span class="part">comido</span></span><span class="hr-de">ihr hättet gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">ellos/uds.</span><span class="hr-aux">habrían</span><span class="hr-full">habrían <span class="part">vivido</span></span><span class="hr-de">sie hätten gelebt</span></div>
+        </div>
+        <p class="ex-section-label">Nicht erfüllte Hypothese (Si + Pluscuamperfecto Subjuntivo)</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">Si no hubiera perdido, <span class="key">habría tenido</span> 3 trofeos.</span><span class="ex-de">Wenn ich nicht verloren hätte, hätte ich 3 Trophäen.</span></div>
+          <div class="ex-item"><span class="ex-es">Yo <span class="key">habría hecho</span> lo mismo.</span><span class="ex-de">Ich hätte dasselbe getan.</span></div>
+        </div>
+        <p class="ex-section-label">Vorwurf / Bedauern</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">A mi papá no le <span class="key">habría gustado</span> eso.</span><span class="ex-de">Meinem Vater hätte das nicht gefallen.</span></div>
+          <div class="ex-item"><span class="ex-es">Me <span class="key">habría quedado</span> más tiempo.</span><span class="ex-de">Ich wäre länger geblieben.</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── HUBIERA (Subjuntivo Pluscuamperfecto) ── -->
+    <div class="tense-block" data-tense="hubiera">
+      <div class="tense-header"><span class="tense-name">Subjuntivo Pluscuamperfecto</span><span class="tense-de">Konjunktiv II (hypothetische Vergangenheit)</span><span class="tense-note">hubiera/hubieras … + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar" style="color:var(--accent3)">hubiera <span class="end-ar">hablado</span></td><td class="td-conj col-er" style="color:var(--accent3)">hubiera <span class="end-er">comido</span></td><td class="td-conj col-ir" style="color:var(--accent3)">hubiera <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar" style="color:var(--accent3)">hubieras <span class="end-ar">hablado</span></td><td class="td-conj col-er" style="color:var(--accent3)">hubieras <span class="end-er">comido</span></td><td class="td-conj col-ir" style="color:var(--accent3)">hubieras <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar" style="color:var(--accent3)">hubiera <span class="end-ar">hablado</span></td><td class="td-conj col-er" style="color:var(--accent3)">hubiera <span class="end-er">comido</span></td><td class="td-conj col-ir" style="color:var(--accent3)">hubiera <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar" style="color:var(--accent3)">hubiéramos <span class="end-ar">hablado</span></td><td class="td-conj col-er" style="color:var(--accent3)">hubiéramos <span class="end-er">comido</span></td><td class="td-conj col-ir" style="color:var(--accent3)">hubiéramos <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar" style="color:var(--accent3)">hubierais <span class="end-ar">hablado</span></td><td class="td-conj col-er" style="color:var(--accent3)">hubierais <span class="end-er">comido</span></td><td class="td-conj col-ir" style="color:var(--accent3)">hubierais <span class="end-ir">vivido</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar" style="color:var(--accent3)">hubieran <span class="end-ar">hablado</span></td><td class="td-conj col-er" style="color:var(--accent3)">hubieran <span class="end-er">comido</span></td><td class="td-conj col-ir" style="color:var(--accent3)">hubieran <span class="end-ir">vivido</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>hubiera-Baum + Beispielsätze<span class="tog-hint">hubiera/hubieras … + Partizip → hätte getan (nicht eingetreten)</span></button>
+      <div class="ex-body">
+        <div class="haber-formula"><span class="hf-aux" style="color:var(--accent3);border-color:#a87ec955;background:#a87ec922">hubiera / hubieras / hubiera …</span><span class="hf-plus">+</span><span class="hf-part">hablado / comido / vivido</span><span class="hf-eq">=</span><span class="hf-result">hubiera hablado</span><span class="hf-de">→ hätte gesprochen (wenn…)</span></div>
+        <div class="haber-rows">
+          <div class="haber-row"><span class="hr-pronoun">yo</span><span class="hr-aux" style="color:var(--accent3)">hubiera</span><span class="hr-full">hubiera <span class="part">hablado</span></span><span class="hr-de">ich hätte gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">tú</span><span class="hr-aux" style="color:var(--accent3)">hubieras</span><span class="hr-full">hubieras <span class="part">comido</span></span><span class="hr-de">du hättest gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">él/ella</span><span class="hr-aux" style="color:var(--accent3)">hubiera</span><span class="hr-full">hubiera <span class="part">vivido</span></span><span class="hr-de">er/sie hätte gelebt</span></div>
+          <div class="haber-row"><span class="hr-pronoun">nosotros</span><span class="hr-aux" style="color:var(--accent3)">hubiéramos</span><span class="hr-full">hubiéramos <span class="part">hablado</span></span><span class="hr-de">wir hätten gesprochen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">vosotros</span><span class="hr-aux" style="color:var(--accent3)">hubierais</span><span class="hr-full">hubierais <span class="part">comido</span></span><span class="hr-de">ihr hättet gegessen</span></div>
+          <div class="haber-row"><span class="hr-pronoun">ellos/uds.</span><span class="hr-aux" style="color:var(--accent3)">hubieran</span><span class="hr-full">hubieran <span class="part">vivido</span></span><span class="hr-de">sie hätten gelebt</span></div>
+        </div>
+        <p class="ex-section-label">Wenn-dann Sätze — nicht eingetretene Vergangenheit (Si + hubiera → Cond. Compuesto)</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">Si <span class="key">hubieras venido</span>, lo habrías visto.</span><span class="ex-de">Wenn du gekommen wärst, hättest du es gesehen.</span></div>
+          <div class="ex-item"><span class="ex-es">Si <span class="key">hubiera sabido</span>, te habría llamado.</span><span class="ex-de">Wenn ich es gewusst hätte, hätte ich dich angerufen.</span></div>
+          <div class="ex-item"><span class="ex-es">Si no <span class="key">hubiera perdido</span>, tendría 3 trofeos.</span><span class="ex-de">Wenn ich nicht verloren hätte, hätte ich 3 Trophäen.</span></div>
+        </div>
+        <p class="ex-section-label">Bedauern / Vorwurf</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">Yo <span class="key">hubiera hecho</span> lo mismo.</span><span class="ex-de">Ich hätte dasselbe getan.</span></div>
+          <div class="ex-item"><span class="ex-es">¡Ojalá <span class="key">hubiera estudiado</span> más!</span><span class="ex-de">Hätte ich doch mehr gelernt!</span></div>
+          <div class="ex-item"><span class="ex-es">A mi papá no le <span class="key">hubiera gustado</span> eso.</span><span class="ex-de">Meinem Vater hätte das nicht gefallen.</span></div>
+        </div>
+        <p class="ex-section-label">Unterschied: hubiera vs. habría</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">Si <span class="key">hubiera</span> estudiado → <span class="key">habría</span> aprobado.</span><span class="ex-de">Wenn ich gelernt hätte (hubiera) → hätte ich bestanden (habría).</span></div>
+          <div class="ex-item"><span class="ex-es"><span class="key">hubiera</span> = Bedingung (Subjuntivo)<br><span class="key">habría</span> = Ergebnis (Condicional)</span><span class="ex-de">hubiera = Nebensatz (wenn…)<br>habría = Hauptsatz (dann…)</span></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /panel-conj -->
+
+
+<!-- ══════ PANEL 2 — VERBOS IRREGULARES ══════ -->
+<div class="panel" id="panel-irr">
+<div class="irr-wrap">
+  <p class="irr-intro">Aus dem Unterrichtsdokument von Antonio — alle unregelmäßigen Verbformen nach Zeitform</p>
+
+  <div class="irr-section" id="irr-futuro-simple">
+    <div class="irr-section-title">Futuro Simple <span class="de">Futur I · Irregular</span><span class="tense-tag">Futuro Simple</span></div>
+    <p class="irr-note">Infinitiv wird ersetzt — Endungen (-é/-ás/-á/-emos/-éis/-án) bleiben gleich</p>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">tendré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">tendrás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">tendrá</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">tendremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">tendrán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">hacer</span><span class="meaning">machen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">haré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">harás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">hará</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">haremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">harán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">decir</span><span class="meaning">sagen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">diré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">dirás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">dirá</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">diremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">dirán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poder</span><span class="meaning">können</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">podré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">podrás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">podrá</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">podremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">podrán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">querer</span><span class="meaning">wollen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">querré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">querrás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">querrá</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">querremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">querrán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">venir</span><span class="meaning">kommen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">vendré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">vendrás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">vendrá</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">vendremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">vendrán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">salir</span><span class="meaning">ausgehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">saldré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">saldrás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">saldrá</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">saldremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">saldrán</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="irr-section" id="irr-cond-simple">
+    <div class="irr-section-title">Condicional Simple <span class="de">Konjunktiv II · Irregular</span><span class="tense-tag">Cond. Simple</span></div>
+    <p class="irr-note">Gleicher unregelmäßiger Stamm wie Futuro Simple — Endungen: -ía/-ías/-ía/-íamos/-íais/-ían</p>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">tendría</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">tendrías</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">tendría</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">tendríamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">tendrían</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poder</span><span class="meaning">können</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">podría</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">podrías</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">podría</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">podríamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">podrían</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">hacer</span><span class="meaning">machen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">haría</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">harías</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">haría</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">haríamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">harían</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">decir</span><span class="meaning">sagen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">diría</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">dirías</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">diría</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">diríamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">dirían</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">querer</span><span class="meaning">wollen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">querría</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">querrías</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">querría</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">querríamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">querrían</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="irr-section" id="irr-indefinido">
+    <div class="irr-section-title">Pretérito Indefinido <span class="de">Präteritum · Irregular</span><span class="tense-tag">Pret. Indefinido</span></div>
+    <p class="irr-note">Ser und Ir sind identisch — der Kontext zeigt welches gemeint ist</p>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ser / ir</span><span class="meaning">sein / gehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">fui</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">fuiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">fue</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">fuimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">fueron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">tuve</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">tuviste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">tuvo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">tuvimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">tuvieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">estar</span><span class="meaning">sein (Zustand)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">estuve</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">estuviste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">estuvo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">estuvimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">estuvieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">hacer</span><span class="meaning">machen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">hice</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">hiciste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">hizo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">hicimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">hicieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poder</span><span class="meaning">können</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">pude</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">pudiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">pudo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">pudimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">pudieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">decir</span><span class="meaning">sagen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">dije</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">dijiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">dijo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">dijimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">dijeron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">venir</span><span class="meaning">kommen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">vine</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">viniste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">vino</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">vinimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">vinieron</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="irr-section" id="irr-imperfecto">
+    <div class="irr-section-title">Pretérito Imperfecto <span class="de">Präteritum (beschreibend) · Irregular</span><span class="tense-tag">Pret. Imperfecto</span></div>
+    <p class="irr-note">Nur 3 echte Irregulare im Imperfecto — alle anderen sind vollständig regelmäßig</p>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ser</span><span class="meaning">sein (dauerhaft)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">era</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">eras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">era</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">éramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">eran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ir</span><span class="meaning">gehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">iba</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">ibas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">iba</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">íbamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">iban</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ver</span><span class="meaning">sehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">veía</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">veías</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">veía</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">veíamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">veían</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="irr-section" id="irr-participios">
+    <div class="irr-section-title">Participios Irregulares <span class="de">Unregelmäßige Partizipien</span><span class="tense-tag">Perfecto · Pluscuamperf. · Cond. Comp. · Hubiera</span></div>
+    <p class="irr-note">Gelten für alle zusammengesetzten Zeiten: he / había / habría / hubiera + Partizip</p>
+    <div class="part-grid">
+      <div class="part-card"><span class="inf-label">abrir</span><span class="arr">→</span><span class="part-form">abierto</span><span class="part-de">geöffnet</span></div>
+      <div class="part-card"><span class="inf-label">decir</span><span class="arr">→</span><span class="part-form">dicho</span><span class="part-de">gesagt</span></div>
+      <div class="part-card"><span class="inf-label">escribir</span><span class="arr">→</span><span class="part-form">escrito</span><span class="part-de">geschrieben</span></div>
+      <div class="part-card"><span class="inf-label">hacer</span><span class="arr">→</span><span class="part-form">hecho</span><span class="part-de">gemacht</span></div>
+      <div class="part-card"><span class="inf-label">morir</span><span class="arr">→</span><span class="part-form">muerto</span><span class="part-de">gestorben</span></div>
+      <div class="part-card"><span class="inf-label">poner</span><span class="arr">→</span><span class="part-form">puesto</span><span class="part-de">gestellt</span></div>
+      <div class="part-card"><span class="inf-label">romper</span><span class="arr">→</span><span class="part-form">roto</span><span class="part-de">gebrochen</span></div>
+      <div class="part-card"><span class="inf-label">ver</span><span class="arr">→</span><span class="part-form">visto</span><span class="part-de">gesehen</span></div>
+      <div class="part-card"><span class="inf-label">volver</span><span class="arr">→</span><span class="part-form">vuelto</span><span class="part-de">zurückgekehrt</span></div>
+      <div class="part-card"><span class="inf-label">cubrir</span><span class="arr">→</span><span class="part-form">cubierto</span><span class="part-de">bedeckt</span></div>
+      <div class="part-card"><span class="inf-label">resolver</span><span class="arr">→</span><span class="part-form">resuelto</span><span class="part-de">gelöst</span></div>
+      <div class="part-card"><span class="inf-label">imprimir</span><span class="arr">→</span><span class="part-form">impreso</span><span class="part-de">gedruckt</span></div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /panel-irr -->
+
+<script>
+  function switchPanel(id, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.main-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function goToIrr(sectionId) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.main-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-irr').classList.add('active');
+    document.querySelector('.main-tab.irr-tab').classList.add('active');
+    setTimeout(() => {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+
+  function filterTense(tense, btn) {
+    document.querySelectorAll('.btn:not(.verb-ar):not(.verb-er):not(.verb-ir)').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tense-block').forEach(block => {
+      block.classList.toggle('hidden', tense !== 'all' && block.dataset.tense !== tense);
+    });
+  }
+
+  const verbState = { ar: true, er: true, ir: true };
+  function toggleVerb(type, btn) {
+    const active = Object.values(verbState).filter(Boolean).length;
+    if (verbState[type] && active === 1) return;
+    verbState[type] = !verbState[type];
+    btn.classList.toggle('active', verbState[type]);
+    document.body.classList.toggle('hide-' + type, !verbState[type]);
+  }
+
+  function toggleEx(btn) {
+    btn.classList.toggle('open');
+    btn.nextElementSibling.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
