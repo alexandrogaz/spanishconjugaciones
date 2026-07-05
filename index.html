@@ -15,6 +15,7 @@
     --accent3: #a87ec9;
     --accent-irr: #e07a5f;
     --accent-ex: #6eb89a;
+    --accent-sub: #e8c55a;  /* gold for Subjuntivo */
     --text: #e8e4dc;
     --muted: #7a7568;
     --highlight: #2a2520;
@@ -218,7 +219,77 @@
     .td-german, thead th:nth-child(2) { display: none; }
   }
 
-  /* ── IRR PANEL ── */
+  /* ── INTRO CARD ── */
+  .intro-card {
+    max-width: 980px;
+    margin: 0 auto 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.1rem 1.3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 2rem;
+  }
+  .intro-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.82rem;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.03em;
+  }
+  .intro-block p {
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .intro-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+  }
+  .intro-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.73rem;
+    color: var(--muted);
+  }
+  .intro-legend-row .swatch {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  @media (max-width: 640px) {
+    .intro-card { grid-template-columns: 1fr; gap: 0.9rem; padding: 0.85rem 1rem; }
+  }
+
+  /* ── BACK LINK in Irregulares ── */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent2);
+    background: #7eb8c911;
+    border: 1px solid #7eb8c944;
+    padding: 0.18rem 0.55rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+  }
+  .back-link:hover { background: #7eb8c922; border-color: var(--accent2); }
+  .irr-section-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
   .irr-wrap { max-width: 980px; margin: 0 auto; }
   .irr-intro { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.4rem; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.03em; border-left: 3px solid var(--accent-irr); padding-left: 0.8rem; }
   .irr-section { margin-bottom: 1.8rem; }
@@ -241,18 +312,77 @@
   .part-card .part-form { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; font-weight: 600; color: var(--accent-irr); }
   .part-card .part-de { font-size: 0.68rem; color: var(--muted); font-style: italic; }
   .tense-tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; padding: 0.1rem 0.4rem; border-radius: 2px; background: #e07a5f18; border: 1px solid #e07a5f44; color: var(--accent-irr); margin-left: auto; letter-spacing: 0.05em; }
+
+  /* ── MODE DIVIDER ── */
+  .mode-divider {
+    max-width: 980px;
+    margin: 1.5rem auto 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .mode-divider .md-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    color: var(--accent-sub);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+  .mode-divider .md-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, #e8c55a44, transparent);
+  }
+  .mode-divider .md-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Subjuntivo tense-block variant */
+  .tense-block.subjuntivo .tense-header { background: #1a1a10; }
+  .tense-block.subjuntivo .tense-name { color: var(--accent-sub); }
+  .tense-block.subjuntivo { border-color: #e8c55a33; }
+  .tense-block.subjuntivo thead tr { background: #141409; }
+  .tense-block.subjuntivo .ex-toggle { background: #111009; }
+  .tense-block.subjuntivo .ex-toggle:hover { color: var(--accent-sub); }
+  .tense-block.subjuntivo .ex-toggle.open { color: var(--accent-sub); }
+
+  /* Subjuntivo endings use gold color */
+  .end-sub { color: var(--accent-sub); font-weight: 600; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Spanische Konjugation — alle Zeitformen</h1>
-  <p>-ar · -er · -ir · Personalpronomen · Beispielsätze · Verbos Irregulares</p>
+  <h1>Spanische Konjugation — Alle Zeitformen</h1>
+  <p>Herramienta de conjugación · Konjugations-Tool · von Alex Seiler · C1 Español</p>
 </header>
 
 <div class="main-tabs">
-  <button class="main-tab active" onclick="switchPanel('conj', this)">Konjugationstabelle</button>
+  <button class="main-tab active" onclick="switchPanel('conj', this)">📋 Konjugationstabelle</button>
   <button class="main-tab irr-tab" onclick="switchPanel('irr', this)">⚡ Verbos Irregulares</button>
+</div>
+
+<!-- INTRO CARD — für Lehrer / para el profesor -->
+<div class="intro-card" id="intro-card">
+  <div class="intro-block">
+    <h3>Para el profesor / Für den Lehrer</h3>
+    <p>Esta herramienta fue creada por Alex como material de estudio personal. Contiene todas las formas verbales del <strong style="color:var(--accent)">Indicativo</strong> y del <strong style="color:var(--accent-sub)">Subjuntivo</strong>, con ejemplos en alemán y español para cada tiempo verbal.</p>
+    <p style="margin-top:0.5rem">Dieses Tool enthält alle Zeitformen des Indikativs und Subjuntivs, jeweils mit deutschen und spanischen Beispielsätzen sowie den wichtigsten unregelmäßigen Verben.</p>
+  </div>
+  <div class="intro-block">
+    <h3>Cómo usar · So funktioniert es</h3>
+    <div class="intro-legend">
+      <div class="intro-legend-row"><span class="swatch" style="background:#7ab88a"></span><span>Grün = -ar Verben (hablar)</span></div>
+      <div class="intro-legend-row"><span class="swatch" style="background:#7eb8c9"></span><span>Blau = -er Verben (comer)</span></div>
+      <div class="intro-legend-row"><span class="swatch" style="background:#a87ec9"></span><span>Lila = -ir Verben (vivir)</span></div>
+      <div class="intro-legend-row"><span class="swatch" style="background:#e8c55a"></span><span>Gold = Modo Subjuntivo</span></div>
+      <div class="intro-legend-row"><span class="swatch" style="background:#e07a5f"></span><span>Rot = Verbos Irregulares</span></div>
+      <div class="intro-legend-row"><span class="swatch" style="background:#6eb89a"></span><span>Grün-türkis = Beispielsätze (aufklappbar ▶)</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- ══════ PANEL 1 — KONJUGATION ══════ -->
@@ -271,6 +401,10 @@
       <button class="btn" onclick="filterTense('cond-simple',this)">Cond. Simple</button>
       <button class="btn" onclick="filterTense('cond-compuesto',this)">Cond. Compuesto</button>
       <button class="btn" onclick="filterTense('hubiera',this)">Hubiera</button>
+      <button class="btn" onclick="filterTense('sub-presente',this)">Sub. Presente</button>
+      <button class="btn" onclick="filterTense('sub-imperfecto',this)">Sub. Imperfecto</button>
+      <button class="btn" onclick="filterTense('sub-futuro',this)">Sub. Futuro</button>
+      <button class="btn" onclick="filterTense('sub-perfecto',this)">Sub. Perfecto</button>
     </div>
     <div class="control-row">
       <label>Verb</label>
@@ -287,8 +421,8 @@
   <div class="main">
 
     <!-- ── PRESENTE ── -->
-    <div class="tense-block" data-tense="presente">
-      <div class="tense-header"><span class="tense-name">Presente Indicativo</span><span class="tense-de">Präsens</span><span class="tense-note">ich spreche / esse / lebe</span><button class="irr-link none">⚡ keine Irregulares</button></div>
+    <div class="tense-block" id="tense-presente" data-tense="presente">
+      <div class="tense-header"><span class="tense-name">Presente Indicativo</span><span class="tense-de">Präsens</span><span class="tense-note">ich spreche / esse / lebe</span><button class="irr-link" onclick="goToIrr('irr-presente')">⚡ Irregulares →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">o</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">o</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">o</span></td></tr>
         <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">as</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">es</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">es</span></td></tr>
@@ -307,7 +441,7 @@
     </div>
 
     <!-- ── FUTURO PRÓXIMO ── -->
-    <div class="tense-block" data-tense="futuro-proximo">
+    <div class="tense-block" id="tense-futuro-proximo" data-tense="futuro-proximo">
       <div class="tense-header"><span class="tense-name">Futuro Próximo</span><span class="tense-de">Nahes Futur</span><span class="tense-note">ir a + Infinitiv</span><button class="irr-link none">⚡ keine Irregulares</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">voy a hablar</td><td class="td-conj col-er">voy a comer</td><td class="td-conj col-ir">voy a vivir</td></tr>
@@ -327,7 +461,7 @@
     </div>
 
     <!-- ── FUTURO SIMPLE ── -->
-    <div class="tense-block" data-tense="futuro-simple">
+    <div class="tense-block" id="tense-futuro-simple" data-tense="futuro-simple">
       <div class="tense-header"><span class="tense-name">Futuro Simple / Imperfecto</span><span class="tense-de">Futur I</span><span class="tense-note">Endungen identisch für alle Verbtypen</span><button class="irr-link" onclick="goToIrr('irr-futuro-simple')">⚡ Irregulares →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">é</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">é</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">é</span></td></tr>
@@ -347,7 +481,7 @@
     </div>
 
     <!-- ── PRETÉRITO PERFECTO COMPUESTO ── -->
-    <div class="tense-block" data-tense="perfecto">
+    <div class="tense-block" id="tense-perfecto" data-tense="perfecto">
       <div class="tense-header"><span class="tense-name">Pretérito Perfecto Compuesto</span><span class="tense-de">Perfekt</span><span class="tense-note">haber (Präsens) + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">he <span class="end-ar">hablado</span></td><td class="td-conj col-er">he <span class="end-er">comido</span></td><td class="td-conj col-ir">he <span class="end-ir">vivido</span></td></tr>
@@ -378,7 +512,7 @@
     </div>
 
     <!-- ── PRETÉRITO IMPERFECTO ── -->
-    <div class="tense-block" data-tense="imperfecto">
+    <div class="tense-block" id="tense-imperfecto" data-tense="imperfecto">
       <div class="tense-header"><span class="tense-name">Pretérito Imperfecto</span><span class="tense-de">Präteritum (beschreibend)</span><span class="tense-note">-er und -ir teilen dieselben Endungen</span><button class="irr-link" onclick="goToIrr('irr-imperfecto')">⚡ Irregulares →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">aba</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">ía</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">ía</span></td></tr>
@@ -401,7 +535,7 @@
     </div>
 
     <!-- ── PRETÉRITO INDEFINIDO ── -->
-    <div class="tense-block" data-tense="indefinido">
+    <div class="tense-block" id="tense-indefinido" data-tense="indefinido">
       <div class="tense-header"><span class="tense-name">Pretérito Indefinido / Simple</span><span class="tense-de">Präteritum (abgeschlossen)</span><span class="tense-note">-er/-ir gleiche Endungen · dominante Form in Mexiko</span><button class="irr-link" onclick="goToIrr('irr-indefinido')">⚡ Irregulares →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-ar">é</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-er">í</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-ir">í</span></td></tr>
@@ -421,7 +555,7 @@
     </div>
 
     <!-- ── PRETÉRITO PLUSCUAMPERFECTO ── -->
-    <div class="tense-block" data-tense="pluscuamperfecto">
+    <div class="tense-block" id="tense-pluscuamperfecto" data-tense="pluscuamperfecto">
       <div class="tense-header"><span class="tense-name">Pretérito Pluscuamperfecto</span><span class="tense-de">Plusquamperfekt</span><span class="tense-note">haber (Imperfecto) + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">había <span class="end-ar">hablado</span></td><td class="td-conj col-er">había <span class="end-er">comido</span></td><td class="td-conj col-ir">había <span class="end-ir">vivido</span></td></tr>
@@ -452,7 +586,7 @@
     </div>
 
     <!-- ── CONDICIONAL SIMPLE ── -->
-    <div class="tense-block" data-tense="cond-simple">
+    <div class="tense-block" id="tense-cond-simple" data-tense="cond-simple">
       <div class="tense-header"><span class="tense-name">Condicional Simple</span><span class="tense-de">Konjunktiv II (Gegenwart)</span><span class="tense-note">Endungen identisch für alle Verbtypen</span><button class="irr-link" onclick="goToIrr('irr-cond-simple')">⚡ Irregulares →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar</th><th class="col-er er-col">comer</th><th class="col-ir ir-col">vivir</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">hablar</span><span class="end-ar">ía</span></td><td class="td-conj col-er"><span class="stem">comer</span><span class="end-er">ía</span></td><td class="td-conj col-ir"><span class="stem">vivir</span><span class="end-ir">ía</span></td></tr>
@@ -477,7 +611,7 @@
     </div>
 
     <!-- ── CONDICIONAL COMPUESTO ── -->
-    <div class="tense-block" data-tense="cond-compuesto">
+    <div class="tense-block" id="tense-cond-compuesto" data-tense="cond-compuesto">
       <div class="tense-header"><span class="tense-name">Condicional Compuesto</span><span class="tense-de">Konjunktiv II (Vergangenheit)</span><span class="tense-note">haber (Condicional) + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar">habría <span class="end-ar">hablado</span></td><td class="td-conj col-er">habría <span class="end-er">comido</span></td><td class="td-conj col-ir">habría <span class="end-ir">vivido</span></td></tr>
@@ -510,7 +644,7 @@
     </div>
 
     <!-- ── HUBIERA (Subjuntivo Pluscuamperfecto) ── -->
-    <div class="tense-block" data-tense="hubiera">
+    <div class="tense-block" id="tense-hubiera" data-tense="hubiera">
       <div class="tense-header"><span class="tense-name">Subjuntivo Pluscuamperfecto</span><span class="tense-de">Konjunktiv II (hypothetische Vergangenheit)</span><span class="tense-note">hubiera/hubieras … + Partizip</span><button class="irr-link" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
       <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
         <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar" style="color:var(--accent3)">hubiera <span class="end-ar">hablado</span></td><td class="td-conj col-er" style="color:var(--accent3)">hubiera <span class="end-er">comido</span></td><td class="td-conj col-ir" style="color:var(--accent3)">hubiera <span class="end-ir">vivido</span></td></tr>
@@ -549,16 +683,194 @@
     </div>
 
   </div><!-- /main -->
+
+  <!-- ══ MODO SUBJUNTIVO DIVIDER ══ -->
+  <div class="mode-divider">
+    <span class="md-label">Modo Subjuntivo</span>
+    <span class="md-line"></span>
+    <span class="md-note">Irrealität · Wunsch · Zweifel · Bedingung</span>
+  </div>
+
+  <div class="main">
+
+    <!-- SUBJUNTIVO PRESENTE -->
+    <div class="tense-block subjuntivo" id="tense-sub-presente" data-tense="sub-presente">
+      <div class="tense-header"><span class="tense-name">Presente de Subjuntivo</span><span class="tense-de">Konjunktiv Präsens</span><span class="tense-note">Wunsch, Zweifel, Emotion — Gegenwart/Zukunft</span><button class="irr-link" style="border-color:#e8c55a55;color:var(--accent-sub);background:#e8c55a11" onclick="goToIrr('irr-sub-presente')">⚡ Irregulares →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar (-ar)</th><th class="col-er er-col">comer (-er)</th><th class="col-ir ir-col">vivir (-ir)</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">e</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">a</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">a</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">es</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">as</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">as</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">e</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">a</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">a</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">emos</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">amos</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">amos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">éis</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">áis</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">áis</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">en</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">an</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">an</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">-ar→ -e · -er/-ir→ -a (Vokalwechsel!)</span></button>
+      <div class="ex-body"><p class="ex-section-label">Wunsch / Hoffnung</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Quiero que tú <span class="key">hables</span> con él.</span><span class="ex-de">Ich will, dass du mit ihm sprichst.</span></div>
+        <div class="ex-item"><span class="ex-es">¡Ojalá <span class="key">venga</span> mañana!</span><span class="ex-de">Hoffentlich kommt er morgen!</span></div>
+        <div class="ex-item"><span class="ex-es">Espero que todo <span class="key">salga</span> bien.</span><span class="ex-de">Ich hoffe, dass alles gut geht.</span></div>
+      </div><p class="ex-section-label">Zweifel / Verneinung</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">No creo que <span class="key">sea</span> verdad.</span><span class="ex-de">Ich glaube nicht, dass es wahr ist.</span></div>
+        <div class="ex-item"><span class="ex-es">Es importante que <span class="key">estudies</span>.</span><span class="ex-de">Es ist wichtig, dass du lernst.</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- SUBJUNTIVO IMPERFECTO -->
+    <div class="tense-block subjuntivo" id="tense-sub-imperfecto" data-tense="sub-imperfecto">
+      <div class="tense-header"><span class="tense-name">Imperfecto de Subjuntivo</span><span class="tense-de">Konjunktiv Imperfekt</span><span class="tense-note">Vergangenheit + hypothetische Si-Sätze</span><button class="irr-link" style="border-color:#e8c55a55;color:var(--accent-sub);background:#e8c55a11" onclick="goToIrr('irr-sub-imperfecto')">⚡ Irregulares →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar (-ar)</th><th class="col-er er-col">comer (-er)</th><th class="col-ir ir-col">vivir (-ir)</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">ara</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">iera</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">iera</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">aras</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">ieras</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">ieras</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">ara</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">iera</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">iera</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">áramos</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">iéramos</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">iéramos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">arais</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">ierais</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">ierais</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">aran</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">ieran</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">ieran</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">Schlüsselform für Si-Sätze + Condicional</span></button>
+      <div class="ex-body"><p class="ex-section-label">Si-Sätze (Hypothese Gegenwart)</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Si <span class="key">tuviera</span> dinero, compraría una casa.</span><span class="ex-de">Wenn ich Geld hätte, würde ich ein Haus kaufen.</span></div>
+        <div class="ex-item"><span class="ex-es">Si <span class="key">supiera</span> hablar chino, trabajaría en China.</span><span class="ex-de">Wenn ich Chinesisch sprechen könnte, würde ich in China arbeiten.</span></div>
+        <div class="ex-item"><span class="ex-es">Si <span class="key">fuera</span> millonario, tendría un Lamborghini.</span><span class="ex-de">Wenn ich Millionär wäre, hätte ich einen Lamborghini.</span></div>
+      </div><p class="ex-section-label">Wunsch über Vergangenes</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Quería que <span class="key">vinieras</span> a la fiesta.</span><span class="ex-de">Ich wollte, dass du zur Party kommst.</span></div>
+        <div class="ex-item"><span class="ex-es">Me sorprendió que no <span class="key">hablara</span>.</span><span class="ex-de">Es überraschte mich, dass er nicht sprach.</span></div>
+      </div></div></div>
+    </div>
+
+    <!-- SUBJUNTIVO PERFECTO -->
+    <div class="tense-block subjuntivo" id="tense-sub-perfecto" data-tense="sub-perfecto">
+      <div class="tense-header"><span class="tense-name">Pretérito Perfecto de Subjuntivo</span><span class="tense-de">Konjunktiv Perfekt</span><span class="tense-note">haya + Partizip</span><button class="irr-link" style="border-color:#e8c55a55;color:var(--accent-sub);background:#e8c55a11" onclick="goToIrr('irr-participios')">⚡ Partizipien →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar → hablado</th><th class="col-er er-col">comer → comido</th><th class="col-ir ir-col">vivir → vivido</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="end-sub">haya</span> hablado</td><td class="td-conj col-er"><span class="end-sub">haya</span> comido</td><td class="td-conj col-ir"><span class="end-sub">haya</span> vivido</td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="end-sub">hayas</span> hablado</td><td class="td-conj col-er"><span class="end-sub">hayas</span> comido</td><td class="td-conj col-ir"><span class="end-sub">hayas</span> vivido</td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="end-sub">haya</span> hablado</td><td class="td-conj col-er"><span class="end-sub">haya</span> comido</td><td class="td-conj col-ir"><span class="end-sub">haya</span> vivido</td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="end-sub">hayamos</span> hablado</td><td class="td-conj col-er"><span class="end-sub">hayamos</span> comido</td><td class="td-conj col-ir"><span class="end-sub">hayamos</span> vivido</td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="end-sub">hayáis</span> hablado</td><td class="td-conj col-er"><span class="end-sub">hayáis</span> comido</td><td class="td-conj col-ir"><span class="end-sub">hayáis</span> vivido</td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="end-sub">hayan</span> hablado</td><td class="td-conj col-er"><span class="end-sub">hayan</span> comido</td><td class="td-conj col-ir"><span class="end-sub">hayan</span> vivido</td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>haber-Baum + Beispielsätze<span class="tog-hint">haya/hayas … + Partizip = Konjunktiv Perfekt</span></button>
+      <div class="ex-body">
+        <div class="haber-formula"><span class="hf-aux" style="color:var(--accent-sub);border-color:#e8c55a55;background:#e8c55a11">haya / hayas / haya …</span><span class="hf-plus">+</span><span class="hf-part">hablado / comido / vivido</span><span class="hf-eq">=</span><span class="hf-result">haya hablado</span><span class="hf-de">→ (dass er) gesprochen hat</span></div>
+        <div class="haber-rows">
+          <div class="haber-row"><span class="hr-pronoun">yo</span><span class="hr-aux" style="color:var(--accent-sub)">haya</span><span class="hr-full">haya <span class="part">hablado</span></span><span class="hr-de">(dass) ich gesprochen habe</span></div>
+          <div class="haber-row"><span class="hr-pronoun">tú</span><span class="hr-aux" style="color:var(--accent-sub)">hayas</span><span class="hr-full">hayas <span class="part">comido</span></span><span class="hr-de">(dass) du gegessen hast</span></div>
+          <div class="haber-row"><span class="hr-pronoun">él/ella</span><span class="hr-aux" style="color:var(--accent-sub)">haya</span><span class="hr-full">haya <span class="part">vivido</span></span><span class="hr-de">(dass) er/sie gelebt hat</span></div>
+          <div class="haber-row"><span class="hr-pronoun">nosotros</span><span class="hr-aux" style="color:var(--accent-sub)">hayamos</span><span class="hr-full">hayamos <span class="part">hablado</span></span><span class="hr-de">(dass) wir gesprochen haben</span></div>
+          <div class="haber-row"><span class="hr-pronoun">vosotros</span><span class="hr-aux" style="color:var(--accent-sub)">hayáis</span><span class="hr-full">hayáis <span class="part">comido</span></span><span class="hr-de">(dass) ihr gegessen habt</span></div>
+          <div class="haber-row"><span class="hr-pronoun">ellos/uds.</span><span class="hr-aux" style="color:var(--accent-sub)">hayan</span><span class="hr-full">hayan <span class="part">vivido</span></span><span class="hr-de">(dass) sie gelebt haben</span></div>
+        </div>
+        <p class="ex-section-label">Beispielsätze</p><div class="ex-list">
+          <div class="ex-item"><span class="ex-es">Espero que <span class="key">hayas llegado</span> bien.</span><span class="ex-de">Ich hoffe, dass du gut angekommen bist.</span></div>
+          <div class="ex-item"><span class="ex-es">No creo que <span class="key">haya dicho</span> eso.</span><span class="ex-de">Ich glaube nicht, dass er das gesagt hat.</span></div>
+          <div class="ex-item"><span class="ex-es">Me alegra que <span class="key">hayas venido</span>.</span><span class="ex-de">Es freut mich, dass du gekommen bist.</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SUBJUNTIVO FUTURO -->
+    <div class="tense-block subjuntivo" id="tense-sub-futuro" data-tense="sub-futuro">
+      <div class="tense-header"><span class="tense-name">Futuro de Subjuntivo</span><span class="tense-de">Konjunktiv Futur</span><span class="tense-note">sehr selten — Rechtstexte, Sprichwörter</span><button class="irr-link" style="border-color:#e8c55a55;color:var(--accent-sub);background:#e8c55a11" onclick="goToIrr('irr-sub-futuro')">⚡ Irregulares →</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Pronomen</th><th>Deutsch</th><th class="col-ar ar-col">hablar (-ar)</th><th class="col-er er-col">comer (-er)</th><th class="col-ir ir-col">vivir (-ir)</th></tr></thead><tbody>
+        <tr><td class="td-pronoun">yo</td><td class="td-german">ich</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">are</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">iere</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">iere</span></td></tr>
+        <tr><td class="td-pronoun">tú</td><td class="td-german">du</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">ares</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">ieres</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">ieres</span></td></tr>
+        <tr><td class="td-pronoun">él/ella/usted</td><td class="td-german">er/sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">are</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">iere</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">iere</span></td></tr>
+        <tr><td class="td-pronoun">nosotros/as</td><td class="td-german">wir</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">áremos</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">iéremos</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">iéremos</span></td></tr>
+        <tr><td class="td-pronoun">vosotros/as</td><td class="td-german">ihr</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">areis</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">iereis</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">iereis</span></td></tr>
+        <tr><td class="td-pronoun">ellos/uds.</td><td class="td-german">sie/Sie</td><td class="td-conj col-ar"><span class="stem">habl</span><span class="end-sub">aren</span></td><td class="td-conj col-er"><span class="stem">com</span><span class="end-sub">ieren</span></td><td class="td-conj col-ir"><span class="stem">viv</span><span class="end-sub">ieren</span></td></tr>
+      </tbody></table></div>
+      <div class="ex-tree"><button class="ex-toggle" onclick="toggleEx(this)"><span class="tog-icon">▶</span>Beispielsätze<span class="tog-hint">erkenne die Form — im Alltag Presente Subj. verwenden</span></button>
+      <div class="ex-body"><p class="ex-section-label">Sprichwörter (historisch erhalten)</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">Donde <span class="key">fueres</span>, haz lo que <span class="key">vieres</span>.</span><span class="ex-de">Wo immer du hingehst, tu was du siehst. (= Andere Länder, andere Sitten)</span></div>
+        <div class="ex-item"><span class="ex-es">Sea lo que <span class="key">fuere</span>.</span><span class="ex-de">Was auch immer sein mag.</span></div>
+      </div><p class="ex-section-label">Rechts- &amp; Vertragssprache</p><div class="ex-list">
+        <div class="ex-item"><span class="ex-es">El que <span class="key">infringiere</span> esta ley será sancionado.</span><span class="ex-de">Wer gegen dieses Gesetz verstößt, wird bestraft.</span></div>
+      </div></div></div>
+    </div>
+
+  </div><!-- /subjuntivo main -->
 </div><!-- /panel-conj -->
 
 
 <!-- ══════ PANEL 2 — VERBOS IRREGULARES ══════ -->
 <div class="panel" id="panel-irr">
 <div class="irr-wrap">
-  <p class="irr-intro">Aus dem Unterrichtsdokument von Antonio — alle unregelmäßigen Verbformen nach Zeitform</p>
+  <p class="irr-intro">Verbos irregulares más importantes — geordnet nach Zeitform. Klicke auf <strong style="color:var(--accent2)">← Zur Tabelle</strong> um direkt zur jeweiligen Konjugationstabelle zu springen.</p>
+
+  <!-- ══ PRESENTE INDICATIVO IRREGULARES (neu) ══ -->
+  <div class="irr-section" id="irr-presente">
+    <div class="irr-section-title">Presente Indicativo <span class="de">Präsens · Irregular</span><span class="tense-tag">Presente</span></div>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('presente')">← Zur Konjugationstabelle</button></div>
+    <p class="irr-note">Die wichtigsten unregelmäßigen Verben im Präsens — teils komplett irregulär (ser, ir), teils nur in yo (hacer→hago, salir→salgo), teils Stammvokalwechsel (poder→puedo, querer→quiero).</p>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ser</span><span class="meaning">sein (dauerhaft)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">soy</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">eres</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">es</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">somos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">sois</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">son</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">estar</span><span class="meaning">sein (Zustand)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">estoy</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">estás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">está</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">estamos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">estáis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">están</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ir</span><span class="meaning">gehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">voy</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">vas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">va</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">vamos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">vais</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">van</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">tengo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">tienes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">tiene</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">tenemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">tenéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">tienen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">hacer</span><span class="meaning">machen / tun</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">hago</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">haces</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">hace</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">hacemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">hacéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">hacen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poder</span><span class="meaning">können · o→ue</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">puedo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">puedes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">puede</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">podemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">podéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">pueden</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">querer</span><span class="meaning">wollen · e→ie</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">quiero</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">quieres</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">quiere</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">queremos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">queréis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">quieren</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">saber</span><span class="meaning">wissen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">sé</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">sabes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">sabe</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">sabemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">sabéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">saben</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">venir</span><span class="meaning">kommen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">vengo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">vienes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">viene</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">venimos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">venís</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">vienen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">salir</span><span class="meaning">ausgehen / rausgehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">salgo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">sales</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">sale</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">salimos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">salís</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">salen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poner</span><span class="meaning">stellen / legen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">pongo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">pones</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">pone</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">ponemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">ponéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">ponen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">decir</span><span class="meaning">sagen · e→i</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">digo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">dices</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">dice</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">decimos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">decís</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">dicen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">dar</span><span class="meaning">geben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">doy</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">das</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">da</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">damos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">dais</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">dan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ver</span><span class="meaning">sehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">veo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">ves</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">ve</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">vemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">veis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">ven</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">traer</span><span class="meaning">mitbringen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">traigo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">traes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">trae</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">traemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">traéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">traen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">oír</span><span class="meaning">hören</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">oigo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">oyes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">oye</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">oímos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">oís</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">oyen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">conocer</span><span class="meaning">kennen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">conozco</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">conoces</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">conoce</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">conocemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">conocéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">conocen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">seguir</span><span class="meaning">folgen / weitermachen · e→i</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">sigo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">sigues</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">sigue</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">seguimos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">seguís</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">siguen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">dormir</span><span class="meaning">schlafen · o→ue</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">duermo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">duermes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">duerme</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">dormimos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">dormís</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">duermen</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">jugar</span><span class="meaning">spielen · u→ue</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">juego</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">juegas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">juega</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">jugamos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">jugáis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">juegan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">pedir</span><span class="meaning">bitten / bestellen · e→i</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">pido</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">pides</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">pide</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">pedimos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">pedís</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">piden</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">volver</span><span class="meaning">zurückkehren · o→ue</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">vuelvo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">vuelves</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">vuelve</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">volvemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">volvéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">vuelven</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">encontrar</span><span class="meaning">finden / treffen · o→ue</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">encuentro</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">encuentras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">encuentra</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">encontramos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">encontráis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">encuentran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">entender</span><span class="meaning">verstehen · e→ie</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">entiendo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">entiendes</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">entiende</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">entendemos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">entendéis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">entienden</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">pensar</span><span class="meaning">denken · e→ie</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">pienso</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">piensas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">piensa</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">pensamos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">pensáis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">piensan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">empezar</span><span class="meaning">anfangen · e→ie</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">empiezo</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">empiezas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">empieza</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">empezamos</span></div><div class="irr-row"><span class="pronoun">vosotros</span><span class="form">empezáis</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">empiezan</span></div></div></div>
+    </div>
+    <p class="irr-note" style="margin-top:0.5rem">💡 Muster: Stammvokalwechsel gilt immer für yo/tú/él/ellos — nicht für nosotros/vosotros (= Schuhsohlen-Verb / verbos de «bota»)</p>
+  </div>
+
+  <!-- ══ INDEFINIDO — FEHLENDE VERBEN ERGÄNZT ══ -->
+  <div class="irr-section" id="irr-indefinido-extra">
+    <div class="irr-section-title">Pretérito Indefinido <span class="de">Zusätzliche wichtige Irregulare</span><span class="tense-tag">Pret. Indefinido</span></div>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('indefinido')">← Zur Konjugationstabelle</button></div>
+    <p class="irr-note">Ergänzung zu ser/ir/tener/estar/hacer/poder/decir/venir — weitere häufige Verben</p>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">dar</span><span class="meaning">geben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">di</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">diste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">dio</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">dimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">dieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">saber</span><span class="meaning">wissen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">supe</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">supiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">supo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">supimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">supieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poner</span><span class="meaning">stellen / legen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">puse</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">pusiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">puso</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">pusimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">pusieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">traer</span><span class="meaning">mitbringen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">traje</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">trajiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">trajo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">trajimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">trajeron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">querer</span><span class="meaning">wollen / mögen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">quise</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">quisiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">quiso</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">quisimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">quisieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">leer</span><span class="meaning">lesen · y-Einschub</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">leí</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">leíste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">leyó</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">leímos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">leyeron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">oír</span><span class="meaning">hören · y-Einschub</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">oí</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">oíste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">oyó</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">oímos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">oyeron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">dormir</span><span class="meaning">schlafen · o→u</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">dormí</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">dormiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">durmió</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">dormimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">durmieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">pedir</span><span class="meaning">bitten / bestellen · e→i</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">pedí</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">pediste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">pidió</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">pedimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">pidieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">seguir</span><span class="meaning">folgen · e→i</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">seguí</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">seguiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">siguió</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">seguimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">siguieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">andar</span><span class="meaning">gehen / laufen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">anduve</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">anduviste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">anduvo</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">anduvimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">anduvieron</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">caer</span><span class="meaning">fallen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">caí</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">caíste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">cayó</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">caímos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">cayeron</span></div></div></div>
+    </div>
+  </div>
+
+  <!-- ══ FUTURO/CONDICIONAL EXTRAS ══ -->
+  <div class="irr-section" id="irr-futuro-extra">
+    <div class="irr-section-title">Futuro Simple + Condicional <span class="de">Zusätzliche Irregulare</span><span class="tense-tag">Futuro · Condicional</span></div>
+    <div class="irr-section-nav">
+      <button class="back-link" onclick="goToTense('futuro-simple')">← Futuro Simple</button>
+      <button class="back-link" onclick="goToTense('cond-simple')">← Cond. Simple</button>
+    </div>
+    <p class="irr-note">Gleicher unregelmäßiger Stamm für Futuro und Condicional — hier fehlende wichtige Verben ergänzt</p>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poner</span><span class="meaning">stellen / legen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">Futuro yo</span><span class="form">pondré</span></div><div class="irr-row"><span class="pronoun">Cond. yo</span><span class="form">pondría</span></div><div class="irr-row"><span class="pronoun">tú (fut.)</span><span class="form">pondrás</span></div><div class="irr-row"><span class="pronoun">él (fut.)</span><span class="form">pondrá</span></div><div class="irr-row"><span class="pronoun">ellos (fut.)</span><span class="form">pondrán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">saber</span><span class="meaning">wissen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">Futuro yo</span><span class="form">sabré</span></div><div class="irr-row"><span class="pronoun">Cond. yo</span><span class="form">sabría</span></div><div class="irr-row"><span class="pronoun">tú (fut.)</span><span class="form">sabrás</span></div><div class="irr-row"><span class="pronoun">él (fut.)</span><span class="form">sabrá</span></div><div class="irr-row"><span class="pronoun">ellos (fut.)</span><span class="form">sabrán</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">haber</span><span class="meaning">haben (Hilfsvb.) — hay</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">Futuro</span><span class="form">habrá</span></div><div class="irr-row"><span class="pronoun">Condicional</span><span class="form">habría</span></div><div class="irr-row"><span class="pronoun">Presente</span><span class="form">hay</span></div><div class="irr-row"><span class="pronoun">Imperfecto</span><span class="form">había</span></div><div class="irr-row"><span class="pronoun">Indefinido</span><span class="form">hubo</span></div></div></div>
+    </div>
+  </div>
 
   <div class="irr-section" id="irr-futuro-simple">
     <div class="irr-section-title">Futuro Simple <span class="de">Futur I · Irregular</span><span class="tense-tag">Futuro Simple</span></div>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('futuro-simple')">← Zur Konjugationstabelle</button></div>
     <p class="irr-note">Infinitiv wird ersetzt — Endungen (-é/-ás/-á/-emos/-éis/-án) bleiben gleich</p>
     <div class="irr-grid">
       <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">tendré</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">tendrás</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">tendrá</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">tendremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">tendrán</span></div></div></div>
@@ -573,6 +885,7 @@
 
   <div class="irr-section" id="irr-cond-simple">
     <div class="irr-section-title">Condicional Simple <span class="de">Konjunktiv II · Irregular</span><span class="tense-tag">Cond. Simple</span></div>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('cond-simple')">← Zur Konjugationstabelle</button></div>
     <p class="irr-note">Gleicher unregelmäßiger Stamm wie Futuro Simple — Endungen: -ía/-ías/-ía/-íamos/-íais/-ían</p>
     <div class="irr-grid">
       <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">tendría</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">tendrías</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">tendría</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">tendríamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">tendrían</span></div></div></div>
@@ -585,6 +898,7 @@
 
   <div class="irr-section" id="irr-indefinido">
     <div class="irr-section-title">Pretérito Indefinido <span class="de">Präteritum · Irregular</span><span class="tense-tag">Pret. Indefinido</span></div>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('indefinido')">← Zur Konjugationstabelle</button><button class="back-link" onclick="document.getElementById('irr-indefinido-extra').scrollIntoView({behavior:'smooth',block:'start'})">↓ Weitere Irregulare</button></div>
     <p class="irr-note">Ser und Ir sind identisch — der Kontext zeigt welches gemeint ist</p>
     <div class="irr-grid">
       <div class="irr-card"><div class="irr-card-head"><span class="inf">ser / ir</span><span class="meaning">sein / gehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">fui</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">fuiste</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">fue</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">fuimos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">fueron</span></div></div></div>
@@ -599,6 +913,7 @@
 
   <div class="irr-section" id="irr-imperfecto">
     <div class="irr-section-title">Pretérito Imperfecto <span class="de">Präteritum (beschreibend) · Irregular</span><span class="tense-tag">Pret. Imperfecto</span></div>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('imperfecto')">← Zur Konjugationstabelle</button></div>
     <p class="irr-note">Nur 3 echte Irregulare im Imperfecto — alle anderen sind vollständig regelmäßig</p>
     <div class="irr-grid">
       <div class="irr-card"><div class="irr-card-head"><span class="inf">ser</span><span class="meaning">sein (dauerhaft)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form">era</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form">eras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form">era</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form">éramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form">eran</span></div></div></div>
@@ -609,6 +924,13 @@
 
   <div class="irr-section" id="irr-participios">
     <div class="irr-section-title">Participios Irregulares <span class="de">Unregelmäßige Partizipien</span><span class="tense-tag">Perfecto · Pluscuamperf. · Cond. Comp. · Hubiera</span></div>
+    <div class="irr-section-nav">
+      <button class="back-link" onclick="goToTense('perfecto')">← Pret. Perfecto</button>
+      <button class="back-link" onclick="goToTense('pluscuamperfecto')">← Pluscuamperfecto</button>
+      <button class="back-link" onclick="goToTense('cond-compuesto')">← Cond. Compuesto</button>
+      <button class="back-link" onclick="goToTense('hubiera')">← Hubiera</button>
+      <button class="back-link" onclick="goToTense('sub-perfecto')">← Sub. Perfecto</button>
+    </div>
     <p class="irr-note">Gelten für alle zusammengesetzten Zeiten: he / había / habría / hubiera + Partizip</p>
     <div class="part-grid">
       <div class="part-card"><span class="inf-label">abrir</span><span class="arr">→</span><span class="part-form">abierto</span><span class="part-de">geöffnet</span></div>
@@ -626,10 +948,79 @@
     </div>
   </div>
 
+
+  <!-- ══ SUBJUNTIVO IRREGULARES ══ -->
+  <div class="irr-section" id="irr-sub-presente">
+    <div class="irr-section-title" style="color:var(--accent-sub)">Presente de Subjuntivo <span class="de" style="color:var(--muted)">Konjunktiv Präsens · Irregular</span><span class="tense-tag" style="color:var(--accent-sub);border-color:#e8c55a44;background:#e8c55a11">Sub. Presente</span></div>
+    <p class="irr-note">Stamm kommt vom yo-Presente: hago → hag- → haga. Ser und Estar komplett unregelmäßig.</p>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('sub-presente')">← Zur Konjugationstabelle</button></div>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ser</span><span class="meaning">sein</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">sea</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">seas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">sea</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">seamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">sean</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">estar</span><span class="meaning">sein (Zustand)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">esté</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">estés</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">esté</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">estemos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">estén</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">haber</span><span class="meaning">haben (Hilfsvb.)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">haya</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">hayas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">haya</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">hayamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">hayan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">tenga</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">tengas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">tenga</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">tengamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">tengan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">hacer</span><span class="meaning">machen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">haga</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">hagas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">haga</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">hagamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">hagan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ir</span><span class="meaning">gehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">vaya</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">vayas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">vaya</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">vayamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">vayan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poder</span><span class="meaning">können</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">pueda</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">puedas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">pueda</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">podamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">puedan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">saber</span><span class="meaning">wissen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">sepa</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">sepas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">sepa</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">sepamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">sepan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">decir</span><span class="meaning">sagen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">diga</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">digas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">diga</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">digamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">digan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">venir</span><span class="meaning">kommen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">venga</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">vengas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">venga</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">vengamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">vengan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">salir</span><span class="meaning">ausgehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">salga</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">salgas</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">salga</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">salgamos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">salgan</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">querer</span><span class="meaning">wollen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">quiera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">quieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">quiera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">queramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">quieran</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="irr-section" id="irr-sub-imperfecto">
+    <div class="irr-section-title" style="color:var(--accent-sub)">Imperfecto de Subjuntivo <span class="de" style="color:var(--muted)">Konjunktiv Imperfekt · Irregular</span><span class="tense-tag" style="color:var(--accent-sub);border-color:#e8c55a44;background:#e8c55a11">Sub. Imperfecto</span></div>
+    <p class="irr-note">Stamm = 3. Pers. Plural Indefinido ohne -ron: fueron → fuer-, tuvieron → tuvier-. Gilt auch für hubiera.</p>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('sub-imperfecto')">← Sub. Imperfecto</button><button class="back-link" onclick="goToTense('hubiera')">← Hubiera</button></div>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ser / ir</span><span class="meaning">sein / gehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">fuera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">fueras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">fuera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">fuéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">fueran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">tuviera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">tuvieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">tuviera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">tuviéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">tuvieran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">estar</span><span class="meaning">sein (Zustand)</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">estuviera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">estuvieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">estuviera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">estuviéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">estuvieran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">hacer</span><span class="meaning">machen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">hiciera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">hicieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">hiciera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">hiciéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">hicieran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">poder</span><span class="meaning">können</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">pudiera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">pudieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">pudiera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">pudiéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">pudieran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">saber</span><span class="meaning">wissen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">supiera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">supieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">supiera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">supiéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">supieran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">decir</span><span class="meaning">sagen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">dijera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">dijeras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">dijera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">dijéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">dijeran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">venir</span><span class="meaning">kommen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">viniera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">vinieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">viniera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">viniéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">vinieran</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">querer</span><span class="meaning">wollen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">quisiera</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">quisieras</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">quisiera</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">quisiéramos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">quisieran</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="irr-section" id="irr-sub-futuro">
+    <div class="irr-section-title" style="color:var(--accent-sub)">Futuro de Subjuntivo <span class="de" style="color:var(--muted)">Konjunktiv Futur · Irregular</span><span class="tense-tag" style="color:var(--accent-sub);border-color:#e8c55a44;background:#e8c55a11">Sub. Futuro</span></div>
+    <p class="irr-note">Gleicher Stamm wie Imperfecto Subjuntivo. Heute fast nur in Sprichwörtern und Rechtstexten.</p>
+    <div class="irr-section-nav"><button class="back-link" onclick="goToTense('sub-futuro')">← Zur Konjugationstabelle</button></div>
+    <div class="irr-grid">
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">ser / ir</span><span class="meaning">sein / gehen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">fuere</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">fueres</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">fuere</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">fuéremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">fueren</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">tener</span><span class="meaning">haben</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">tuviere</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">tuvieres</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">tuviere</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">tuviéremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">tuvieren</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">hacer</span><span class="meaning">machen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">hiciere</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">hicieres</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">hiciere</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">hiciéremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">hicieren</span></div></div></div>
+      <div class="irr-card"><div class="irr-card-head"><span class="inf">saber</span><span class="meaning">wissen</span></div><div class="irr-card-body"><div class="irr-row"><span class="pronoun">yo</span><span class="form" style="color:var(--accent-sub)">supiere</span></div><div class="irr-row"><span class="pronoun">tú</span><span class="form" style="color:var(--accent-sub)">supieres</span></div><div class="irr-row"><span class="pronoun">él/ella</span><span class="form" style="color:var(--accent-sub)">supiere</span></div><div class="irr-row"><span class="pronoun">nosotros</span><span class="form" style="color:var(--accent-sub)">supiéremos</span></div><div class="irr-row"><span class="pronoun">ellos/uds.</span><span class="form" style="color:var(--accent-sub)">supieren</span></div></div></div>
+    </div>
+  </div>
 </div>
 </div><!-- /panel-irr -->
 
 <script>
+  function goToTense(tenseId) {
+    // Switch to conjugation panel
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.main-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-conj').classList.add('active');
+    document.querySelector('.main-tab:not(.irr-tab)').classList.add('active');
+    // Show all tenses first
+    document.querySelectorAll('.btn:not(.verb-ar):not(.verb-er):not(.verb-ir)').forEach(b => b.classList.remove('active'));
+    document.querySelector('.btn.all-tenses').classList.add('active');
+    document.querySelectorAll('.tense-block').forEach(b => b.classList.remove('hidden'));
+    const divider = document.querySelector('.mode-divider');
+    if (divider) divider.style.display = '';
+    // Scroll to target tense
+    setTimeout(() => {
+      const el = document.getElementById('tense-' + tenseId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  }
+
   function switchPanel(id, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.main-tab').forEach(b => b.classList.remove('active'));
@@ -651,9 +1042,17 @@
   function filterTense(tense, btn) {
     document.querySelectorAll('.btn:not(.verb-ar):not(.verb-er):not(.verb-ir)').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    const isSubj = tense.startsWith('sub-') || tense === 'hubiera';
     document.querySelectorAll('.tense-block').forEach(block => {
       block.classList.toggle('hidden', tense !== 'all' && block.dataset.tense !== tense);
     });
+    // Show/hide the Subjuntivo section divider
+    const divider = document.querySelector('.mode-divider');
+    if (divider) {
+      if (tense === 'all') { divider.style.display = ''; }
+      else if (isSubj) { divider.style.display = ''; }
+      else { divider.style.display = 'none'; }
+    }
   }
 
   const verbState = { ar: true, er: true, ir: true };
